@@ -2,7 +2,7 @@ const workoutServices = require("../services/workoutServices");
 
 const getAllworkout = (req, res) => {
   const allWorkouts = workoutServices.getAllworkout();
-  res.send({status: 200, data: allWorkouts});
+  res.send({ status: 200, data: allWorkouts });
 };
 
 const getOneWorkout = (req, res) => {
@@ -11,8 +11,13 @@ const getOneWorkout = (req, res) => {
 };
 
 const createNewWorkout = (req, res) => {
-  const newWorkout = workoutServices.createNewWorkout();
-  res.send("Create workout");
+  const { body } = req
+  if (body.name || body.mode || body.equipment || body.exercises || body.trainerTip) return
+  const newWorkout = {
+    name: body.name, mode: body.mode, equipment: body.equipment, exercises: body.exercises, trainerTip: body.trainerTip
+  }
+  const createdWorkout = workoutServices.createNewWorkout(newWorkout);
+  res.status(201).send({status: "OK" , data:createdWorkout});
 };
 
 const updateOneWorkout = (req, res) => {
@@ -20,7 +25,7 @@ const updateOneWorkout = (req, res) => {
   res.send("Edit Workout");
 };
 
-const deleteOneWorkout = (req, res) => {             
+const deleteOneWorkout = (req, res) => {
   workoutServices.deleteOneWorkout();
   res.send("Delete workout");
 };
